@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Arquipélago — Mundo Aberto (Three.js WebGPU)</title>
+  <link rel="stylesheet" href="./style.css" />
+
+  <!--
+    Import Map: resolve os especificadores "three", "three/webgpu", "three/tsl" e
+    "three/addons/" direto do CDN, sem bundler. A versão fica fixada (r187) para evitar
+    que mudanças de API quebrem o jogo.
+  -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.webgpu.js",
+        "three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.webgpu.js",
+        "three/tsl": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.tsl.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <!-- Overlay de carregamento -->
+  <div id="loading">
+    <div class="loading-box">
+      <h1>Arquipélago</h1>
+      <p id="loading-text">Gerando o mundo…</p>
+      <div class="bar"><div id="loading-bar"></div></div>
+    </div>
+  </div>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div id="status">
+      <div id="backend">—</div>
+      <div id="mode">A pé</div>
+      <div id="speed"></div>
+    </div>
+
+    <div id="help">
+      <b>Clique</b> travar mouse · <b>Esc</b> soltar · <b>WASD</b> mover · <b>Shift</b> correr · <b>E</b> interagir<br />
+      <b>Clique esq.</b> atacar/cortar/minerar (segure no arco) · <b>Clique dir.</b> comer · <b>1–9 / roda</b> hotbar · <b>Tab/I</b> inventário · <b>G</b> gráficos<br />
+      <b>No navio:</b> W/S velas · A/D leme · X trava leme · Espaço âncora · Clique canhões · R reparar · E desembarcar
+    </div>
+
+    <!-- Sobrevivência -->
+    <div id="crosshair" class="hidden">+</div>
+    <div id="vignette"></div>
+    <div id="clock">☀️ Dia 1 · 07:40</div>
+    <div id="lockhint">Clique na tela para jogar</div>
+    <div id="pickup" class="hidden"></div>
+    <div id="item-name"></div>
+    <div id="survival">
+      <div id="hearts"></div>
+      <div id="hunger"></div>
+    </div>
+    <div id="hotbar"></div>
+
+    <!-- Painel do navio -->
+    <div id="shiphud" class="hidden">
+      <div class="row"><b>Casco</b> <span id="ship-hull-text"></span></div>
+      <div class="bar hull"><div id="ship-hull"></div></div>
+      <div class="row"><span id="ship-sail"></span> · <span id="ship-anchor"></span></div>
+      <div class="row"><span id="ship-rudder"></span> · <span id="ship-balls"></span></div>
+      <div class="row small">Canhões bombordo (esq.)</div>
+      <div class="bar reload"><div id="reload-port"></div></div>
+      <div class="row small">Canhões boreste (dir.)</div>
+      <div class="bar reload"><div id="reload-star"></div></div>
+    </div>
+
+    <!-- Tela de inventário e criação -->
+    <div id="invscreen" class="hidden">
+      <div class="inv-panel">
+        <h2>Inventário</h2>
+        <div id="inv-grid"></div>
+        <div class="sep"></div>
+        <div id="inv-hotbar"></div>
+        <p class="hint">Clique esquerdo: pegar/soltar · Clique direito: pegar metade / soltar 1 · Tab fecha</p>
+      </div>
+      <div class="craft-panel">
+        <h2>Criação</h2>
+        <div id="station"></div>
+        <div id="recipes"></div>
+      </div>
+    </div>
+    <div id="cursor-stack"></div>
+
+    <div id="death" class="hidden"><h1>Você morreu</h1><p>Renascendo na vila…</p></div>
+
+    <div id="prompt" class="hidden"></div>
+
+    <div id="progress" class="hidden">
+      <div id="progress-label">Construindo…</div>
+      <div class="bar"><div id="progress-bar"></div></div>
+    </div>
+
+    <div id="dialog" class="hidden">
+      <div id="dialog-name"></div>
+      <div id="dialog-text"></div>
+      <div id="dialog-hint">[E] fechar</div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
